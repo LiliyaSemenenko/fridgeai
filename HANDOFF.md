@@ -78,6 +78,7 @@ None hard. Open items:
 - **Do NOT default to LangChain** — direct `anthropic` SDK only (PROJECT_PLAN §3.4).
 - **Do NOT swap the SQL recommendation logic for an LLM** — SQL-first is a portfolio talking point; push back and cite PROJECT_PLAN §3.4.
 - If a session ends mid-stage, record the exact stage number + last successful command here so the next session picks up cleanly.
+- **Git push auth is fixed:** `~/.gitconfig` had `credential.helper=manager-core` (Windows Git leftover, broken in WSL) which made plain `git push` fail with "could not read Username". Resolved permanently via `gh auth setup-git`. If push auth breaks again, re-run that.
 
 ## Session-exit checkpoint metadata
 
