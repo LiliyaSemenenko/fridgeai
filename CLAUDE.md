@@ -8,6 +8,29 @@ On session start, read `HANDOFF.md`. Update `HANDOFF.md` before session ends. `d
 ## Git identity — HARD RULE
 Sole contributor/committer/owner/auth: **Liliya `<lilinikcopy@gmail.com>`** on GitHub account **LiliyaSemenenko**. NEVER use Josh Benabou / joshbenabou@gmail.com / his account for anything (the harness reports that email — ignore it). Before any push: `git log --format='%an <%ae>'` must show Liliya only. Remote: `github.com/LiliyaSemenenko/fridgeai` (public). The plan doc in `docs/private/` is gitignored and must never be pushed to this public remote.
 
+## Working rules
+
+### Safety guardrails
+- Commits authored by Liliya only (see Git identity above) — verify before any push.
+- NEVER commit `.env`, secrets, or `docs/private/` to the public repo (gitignored; see conventions #3).
+- NEVER force-push `main`. NEVER rewrite already-pushed history without asking Liliya first.
+- Push only to `LiliyaSemenenko/fridgeai`. Never install project libraries globally (see conventions #1–2).
+
+### Commits & progress notes
+- **Commit often, in small focused units** — one logical change per commit. NEVER dump a large batch of unrelated changes into one commit.
+- **Commit messages must be human-readable and reasonable**: `<area>: <what changed and why>` (e.g. `auth: add refresh-token rotation`, `Stage 2: install uv`). No vague messages ("wip", "fixes", "stuff").
+- **After each meaningful commit, add a detailed entry to `docs/private/PROGRESS_NOTES.md`** (what was done + why, referencing the commit). This devlog is **private, local-only — gitignored, never committed, never pushed.** Append-only; newest entry on top; never overwrite past entries.
+- Plan-doc edits commit inside `docs/private/` (its own repo), never the outer repo. `PROGRESS_NOTES.md` is the exception — it is not committed even there.
+
+### Workflow
+- Read `HANDOFF.md` first; overwrite it before session end.
+- Run `ruff` + `mypy` (backend) / `biome` + `tsc` (frontend) before committing code.
+
+### How to work with Liliya
+- Mentor mode: explain the *why*, use Laravel analogies, frame in NYC-interview terms. Tight over verbose.
+- Liliya approves design-level decisions interactively; low-level code choices are Claude's alone.
+- Propose state-changing commands for Liliya to run herself unless she says otherwise; read-only diagnostics are fine to run.
+
 ## Stack
 
 | Layer | Choice |
@@ -98,6 +121,7 @@ Sole contributor/committer/owner/auth: **Liliya `<lilinikcopy@gmail.com>`** on G
 
 - `docs/private/PROJECT_PLAN.md` (**private** — own nested git repo; the outer repo ignores `docs/private/` entirely) — vision, stack rationale, resume bullets, interview Q&A, change log. Read when the user asks "why did we pick X" or when planning the next phase. After editing it, commit in `docs/private/`, never in the outer repo.
 - `HANDOFF.md` — current session state. READ FIRST every new session; UPDATE LAST.
+- `docs/private/PROGRESS_NOTES.md` — append-only devlog; detailed entry per meaningful commit (newest on top). **Private, local-only — gitignored, never committed or pushed.**
 - `docs/` — deeper design docs (schema, API contracts, prompt library) as they're written.
 - `backend/` — FastAPI app (`app/main.py`, `app/models/`, `app/routers/`, `app/services/anthropic_client.py`, `tests/`).
 - `frontend/` — Vite + React SPA (`src/main.tsx`, `src/routes/`, `src/components/`, `src/lib/api.ts`).
