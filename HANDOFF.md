@@ -45,6 +45,19 @@ Pre-scaffold — Phase 1 not yet started. Repo is live on GitHub (docs only). En
   - MISSING: `uv`, `pnpm`, `nvm` (nvm intentionally skipped).
 - **No `backend/`, no `frontend/`, no `docker-compose.yml`** yet — those come from the scaffold stage.
 
+## Goals for next session
+
+Outcome-focused — what "done" looks like by the end of the next session (the numbered stages below are *how*):
+
+1. **Environment complete & verified** — `uv`, `pnpm` (via corepack), and Docker all working (`uv --version`, `pnpm --version`, `docker run --rm hello-world` all succeed).
+2. **Monorepo scaffolded** — `backend/` (FastAPI + `/health` endpoint + passing test), `frontend/` (Vite + React + TS), `docker-compose.yml` (Postgres 16), `.env.example`, `README.md`.
+3. **All three run locally** — Postgres healthy via Compose, backend returns 200 on `/health`, Vite splash loads on `:5173`.
+4. **Committed cleanly as Liliya** — each stage its own small commit with a readable message, pushed to `LiliyaSemenenko/fridgeai`; each logged in the private `PROGRESS_NOTES.md`.
+
+Stretch (optional): back up the plan doc to a private `fridgeai-plan` repo; confirm `lilinikcopy@gmail.com` on the GitHub account.
+
+Reaching goals 1–3 means **Phase 1 is unblocked** and the next work is real features (JWT auth, recipe CRUD from seeded data).
+
 ## Next action for the fresh session
 
 Environment is partly done. Remaining install + scaffold stages, in order (user runs state-changing commands herself unless she says otherwise; give command + expected output):
