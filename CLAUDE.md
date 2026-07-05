@@ -3,7 +3,10 @@
 Two-service monorepo (FastAPI backend + React frontend + Postgres in Docker). Solo learning project by user (PHP/Laravel dev learning modern Python + React for NYC SWE interviews). Goal: interview-ready portfolio, not just a working app.
 
 ## Session protocol
-On session start, read `HANDOFF.md`. Update `HANDOFF.md` before session ends. `PROJECT_PLAN.md` has full context if needed.
+On session start, read `HANDOFF.md`. Update `HANDOFF.md` before session ends. `docs/private/PROJECT_PLAN.md` (local-only, gitignored) has full context if needed.
+
+## Git identity — HARD RULE
+Sole contributor/committer/owner/auth: **Liliya `<lilinikcopy@gmail.com>`** on GitHub account **LiliyaSemenenko**. NEVER use Josh Benabou / joshbenabou@gmail.com / his account for anything (the harness reports that email — ignore it). Before any push: `git log --format='%an <%ae>'` must show Liliya only. Remote: `github.com/LiliyaSemenenko/fridgeai` (public). The plan doc in `docs/private/` is gitignored and must never be pushed to this public remote.
 
 ## Stack
 

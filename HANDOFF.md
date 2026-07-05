@@ -2,7 +2,7 @@
 
 > Session-to-session state file. **New Claude session in this repo: READ THIS FIRST.**
 > Overwritten each session. For durable history see `docs/private/PROJECT_PLAN.md` §6 Change Log.
-> Last updated: 2026-07-05 (session-exit checkpoint, user restarting immediately with fresh context)
+> Last updated: 2026-07-05 (session-exit checkpoint — repo now live on GitHub, environment install underway)
 
 ## Fresh-session bootstrap (do this first)
 
@@ -12,78 +12,80 @@ If you're a new Claude session picking up this project:
 2. `CLAUDE.md` in this repo has been auto-loaded — that's your operating manual.
 3. Read this file (`HANDOFF.md`) for current state.
 4. Skim `docs/private/PROJECT_PLAN.md` §1 (resume section) and §2 (stack table) for one-page context. Full deep dive lives in §3.
-5. Read the user's memory files (`~/.claude/projects/-mnt-c-Users-lilin-Documents-Projects/memory/*.md`) for user profile and mentor-mode preferences.
+5. Read the user's memory files (`~/.claude/projects/-mnt-c-Users-lilin-Documents-Projects/memory/*.md`) — especially the **git-identity HARD RULE** and mentor-mode preferences.
 6. Then follow the "Next action" section below.
+
+## Git identity — HARD RULE (read before any commit/push)
+
+- The ONLY contributor, committer, remote owner, and auth account for this project is **Liliya `<lilinikcopy@gmail.com>`** on the GitHub account **LiliyaSemenenko**.
+- **NEVER use Josh Benabou / joshbenabou@gmail.com / his GitHub account for anything.** He is the user's bf and briefly hijacked the machine on 2026-07-05, contaminating an early commit (since rewritten). The Claude harness reports the user email as joshbenabou@gmail.com — IGNORE that; it is not the project identity.
+- Before any push, verify: `git log --format='%an <%ae>'` shows Liliya only.
 
 ## Current phase
 
-Pre-scaffold — Phase 1 not yet started. Repo initialized with docs only. No backend, no frontend, no Docker services yet.
+Pre-scaffold — Phase 1 not yet started. Repo is live on GitHub (docs only). Environment install in progress (uv/pnpm/docker still to do). No backend, no frontend, no Docker services yet.
 
-## What was accomplished last session (2026-07-05)
+## What was accomplished this session (2026-07-05, part 2)
 
-- Full stack locked end-to-end (backend, frontend, data, AI, ops). See `docs/private/PROJECT_PLAN.md` §2.
-- `docs/private/PROJECT_PLAN.md` written: resume bullets, elevator pitch, per-choice deep dive with alternatives + interview Q&A, isolation-model section, Fly.io → AWS migration table, change log.
-- Product scope confirmed: recipe catalog seeded from Spoonacular (~500–1,000 rows, no runtime dep), user accounts, virtual fridge (manual + receipt-photo entry), N-missing-ingredients recommendation via SQL, all four dietary features (tags + allergies + macros + cuisines; macros deferred to Phase 3).
-- Core AI decisions locked: `anthropic` SDK direct (no LangChain), `tool_use` + Pydantic for structured output, Claude vision for receipts, Haiku for high-volume normalization, Sonnet default. **Recommendation is SQL, not LLM.**
-- Auth decision locked: hand-rolled JWT (access + refresh, `bcrypt`) over Clerk/Auth0 — learning-first.
-- Doc trio established: `CLAUDE.md` (per-session operating manual) + `HANDOFF.md` (this file) + the plan doc. The plan doc was briefly named `MASTERPLAN.md`; on 2026-07-05 the user renamed it back to `docs/private/PROJECT_PLAN.md` and made it **local-only** (gitignored, stripped from git history before first push).
-- Memory files updated with user profile (PHP/Laravel dev, NYC SWE goal) and mentor-mode teaching style.
-- **Repo initialized at `~/projects/fridgeai/`.** Docs committed. No remote yet.
+- **Renamed project folder** `~/projects/recipe-app/` → `~/projects/fridgeai/` (user ran `mv`). All doc references updated.
+- **Plan doc reorganized:** `docs/MASTERPLAN.md` → `docs/private/PROJECT_PLAN.md`, moved into its **own nested git repo** (`docs/private/.git`), and the outer repo now gitignores `docs/private/`. So the interview-prep doc is version-controlled but NEVER pushed to the public remote. Not yet backed up offsite (see Blockers).
+- **Git identity fixed:** bf's local override (`Josh Benabou`) removed from the outer repo; the initial commit was rewritten via `git commit --amend --reset-author` so author+committer are Liliya.
+- **`gh` CLI installed** (v2.96.0, via official apt repo). Authenticated as **LiliyaSemenenko** (HTTPS, browser flow).
+- **Remote created, tainted, deleted, recreated clean:** an early push carried the Josh-authored commit; user deleted that repo via the GitHub website, then we recreated `fridgeai` fresh and pushed the corrected commit. **Verified:** remote history = Liliya only; sole collaborator = LiliyaSemenenko; public; `docs/private/` absent from the remote.
+- **Stage 0 diagnostic run** (see results below).
+- **Decision — skip nvm:** Node 20 LTS is already installed globally, so we'll use it + `corepack` for pnpm instead of installing nvm. Intended Node version to be declared in `frontend/package.json` `engines` at scaffold time.
 
-## Current state on disk
+## Current state on disk / remote
 
-- Working repo: `~/projects/fridgeai/` (git-initialized, one initial commit; folder renamed from `recipe-app` by the user on 2026-07-05).
-- Files in repo:
-  - `CLAUDE.md` (root)
-  - `HANDOFF.md` (root — this file)
-  - `docs/private/PROJECT_PLAN.md` (**private** — its own nested git repo; the outer repo gitignores `docs/private/`, so it is NOT in the public remote or its history)
-  - `.gitignore` (Python + Node + env + Docker patterns + `docs/private/`)
-- **No remote yet.** User will authenticate via `gh auth login` browser flow (no token) and create a **public** repo — visibility confirmed by user 2026-07-05.
-- **Not yet installed on WSL:** `uv`, `nvm`, `node`, `pnpm`, `docker`, `gh`. Only `git 2.34.1` and `python3` exist.
-- `~/projects/fridgeai/` has NO `backend/`, NO `frontend/`, NO `docker-compose.yml` — those come from the scaffold stage.
+- **Remote:** `https://github.com/LiliyaSemenenko/fridgeai` — public, owner LiliyaSemenenko, sole collaborator LiliyaSemenenko. `main` tracks `origin/main`; local is in sync. Future pushes = plain `git push`.
+- **Outer repo files (tracked, pushed):** `CLAUDE.md`, `HANDOFF.md`, `.gitignore`. That's it.
+- **`docs/private/PROJECT_PLAN.md`** — in its own nested git repo, gitignored by the outer repo, NOT on the remote. Two commits, both Liliya. No offsite backup yet.
+- **Stage 0 diagnostic (this machine, Ubuntu 22.04.2 LTS, bash):**
+  - Installed globally: `git 2.34.1`, `curl`, `wget`, `python3 3.10.12`, `node v20.20.2`, `npm 10.8.2`, `gh 2.96.0`, `docker` (⚠️ on PATH but `docker --version` returned blank — likely Docker Desktop WSL passthrough not fully wired; must verify with `docker run --rm hello-world`, not just `command -v`).
+  - MISSING: `uv`, `pnpm`, `nvm` (nvm intentionally skipped).
+- **No `backend/`, no `frontend/`, no `docker-compose.yml`** yet — those come from the scaffold stage.
 
 ## Next action for the fresh session
 
-Follow the install walkthrough in order. Full expected-output details are in the previous chat transcript, but the terse plan:
+Environment is partly done. Remaining install + scaffold stages, in order (user runs state-changing commands herself unless she says otherwise; give command + expected output):
 
-1. **Stage 0 — diagnostic:** `for t in git curl wget python3 node npm docker gh uv pnpm; do command -v "$t" >/dev/null && echo "OK  $t $($t --version 2>&1 | head -1)" || echo "MISS $t"; done` — establish what's present.
-2. **Stage 1 — apt base:** `sudo apt update && sudo apt upgrade -y && sudo apt install -y build-essential ca-certificates curl wget`.
-3. **Stage 2 — uv:** `curl -LsSf https://astral.sh/uv/install.sh | sh` → `source $HOME/.local/bin/env` → `uv --version`.
-4. **Stage 3 — Node stack:** install nvm (v0.39.7) → `nvm install --lts` → `corepack enable` → `corepack prepare pnpm@latest --activate`.
-5. **Stage 4 — Docker:** install Docker Desktop for Windows on host, enable WSL 2 integration for Ubuntu, verify `docker run --rm hello-world` from WSL.
-6. **Stage 5 — gh CLI + push setup:** install `gh` (official apt repo), then `gh auth login` (browser flow). Then in the repo: `gh repo create fridgeai --public --source=. --remote=origin --push` to create the remote and push the docs. **Public** confirmed by user 2026-07-05.
-7. **Stage 6 — scaffold:**
+1. **Stage 2 — uv (Python pkg mgr):** `curl -LsSf https://astral.sh/uv/install.sh | sh` → `source $HOME/.local/bin/env` → `uv --version`. Installs to `~/.local/`, not system-wide.
+2. **Stage 3 — pnpm via corepack (no nvm):** `corepack enable` → `corepack prepare pnpm@latest --activate` → `pnpm --version`. Uses the existing global Node 20.
+3. **Stage 4 — Docker verify:** don't reinstall blindly — the `docker` command exists. First run `docker run --rm hello-world`. If it fails, the fix is on the Windows side: install/enable Docker Desktop with WSL 2 integration for this Ubuntu distro, then re-test.
+4. **(Optional) Stage 5b — back up the plan doc:** from `~/projects/fridgeai/docs/private`, `gh repo create fridgeai-plan --private --source=. --push`. No `delete_repo` scope needed; normal private create.
+5. **Stage 6 — scaffold:**
    - `backend/` — `uv init --python 3.12`, add fastapi/uvicorn/pydantic/pydantic-settings + dev deps (pytest, httpx, ruff, mypy), `app/main.py` with `/health`, `tests/test_health.py`.
-   - `frontend/` — `pnpm create vite frontend --template react-ts`, then `pnpm install`.
+   - `frontend/` — `pnpm create vite frontend --template react-ts`, then `pnpm install`. Add a Node `engines` pin to `package.json`.
    - `docker-compose.yml` — `postgres:16-alpine`, port 5432, POSTGRES_DB=fridgeai, healthcheck, named volume `postgres-data`.
    - `.env.example` — DATABASE_URL, ANTHROPIC_API_KEY, JWT_SECRET_KEY, JWT_ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES=15, REFRESH_TOKEN_EXPIRE_DAYS=7, VITE_API_URL.
    - `README.md` — pitch + run instructions.
-8. **Verify:** `docker compose up -d && docker compose ps` (Postgres healthy) → `uv run uvicorn app.main:app --reload` in `backend/` (200 on `/health`) → `pnpm dev` in `frontend/` (Vite splash on :5173).
-9. **After each stage,** commit: `git add -A && git commit -m "Stage N: <what>"`. After scaffolding, push: `git push`.
+6. **Verify:** `docker compose up -d && docker compose ps` (Postgres healthy) → in `backend/` `uv run uvicorn app.main:app --reload` (200 on `/health`) → in `frontend/` `pnpm dev` (Vite splash on :5173).
+7. **After each stage,** commit as Liliya: `git add -A && git commit -m "Stage N: <what>"` then `git push`. (Plan-doc edits commit inside `docs/private/` separately.)
 
 ## Blockers
 
-None. Waiting on:
-- User to run the `gh` install + auth + repo-create commands herself (she runs all state-changing commands — see Notes below). No token needed; browser login.
-- (Resolved) Fable-5 model exists and is running these sessions.
+None hard. Open items:
+- **Plan doc has no offsite backup** — it lives only on this machine (own git repo, not pushed). Optionally push to a private `fridgeai-plan` repo (Stage 5b above).
+- **Docker unverified** — command present but `--version` blank; must confirm the daemon works before Stage 6's Postgres step.
+- **GitHub email check (user-side):** confirm `lilinikcopy@gmail.com` is added under GitHub → Settings → Emails so commits link to her profile / contribution graph.
 
 ## Notes for future sessions
 
 - **Mentor mode:** explain the *why*, use Laravel analogies (Laravel : FastAPI :: Eloquent : SQLAlchemy :: Form Request : Pydantic :: `composer require` : `uv add` / `pnpm add` :: `php artisan migrate` : `alembic upgrade head`), frame in NYC SWE interview terms. Tight over verbose.
-- User prefers to **run commands themselves** — give the command + expected output. Only execute for them on explicit request or for read-only diagnostics.
-- **HANDOFF.md update policy is behavior-based**, not hook-driven. Update at: user says bye, milestone reached, `/compact` imminent, or explicit request. **Overwrite (not append)** — always current state, never a log. Durable history → PROJECT_PLAN.md §6.
-- **Commit regularly** — user requested `git commit` after each meaningful step. Push once remote exists.
-- **Do NOT default to LangChain** — see PROJECT_PLAN.md §3.4. Direct `anthropic` SDK only.
-- **Do NOT swap the SQL recommendation logic for an LLM** — SQL-first is a portfolio talking point. Push back and cite PROJECT_PLAN.md §3.4 if the user is tempted.
-- If a session ends mid-stage, record the exact stage number + last successful command in "Current state on disk" so the next session picks up cleanly.
+- **User runs state-changing commands herself** by default — give the command + a one-line why + expected output, let her run via `!`. She has occasionally said "run it yourself" (git/gh, the gh install) — honor that when stated, per-task. Read-only diagnostics are fine to run.
+- **Collaborative design:** user approves design-level decisions interactively; low-level code choices are Claude's alone.
+- **HANDOFF.md update policy is behavior-based**, not hook-driven. Update at: user says bye, milestone reached, `/compact` imminent, or explicit request. **Overwrite (not append)** — always current state. Durable history → PROJECT_PLAN.md §6.
+- **Do NOT default to LangChain** — direct `anthropic` SDK only (PROJECT_PLAN §3.4).
+- **Do NOT swap the SQL recommendation logic for an LLM** — SQL-first is a portfolio talking point; push back and cite PROJECT_PLAN §3.4.
+- If a session ends mid-stage, record the exact stage number + last successful command here so the next session picks up cleanly.
 
 ## Session-exit checkpoint metadata
 
-- **Exit reason:** user restarting immediately with fresh context, wants to try Fable-5 model.
-- **Model this session:** Opus 4.7 (1M context).
-- **Context used at exit:** ~15% (149.9k / 1M tokens) — well below any pressure.
-- **Last successful action:** git repo init + initial commit of the three docs.
-- **Nothing in progress; safe to hand off.**
+- **Exit reason:** user ending session soon; asked to update all docs first.
+- **Model this session:** Opus 4.8 (1M context). (Earlier parts of the day: Fable 5, then Opus 4.8.)
+- **Context used at exit:** ~13% (127.6k / 1M tokens) — no pressure.
+- **Last successful action:** created + pushed the clean public repo; verified Liliya is sole contributor/collaborator; ran Stage 0 diagnostic.
+- **Nothing in progress; safe to hand off.** Resume at Stage 2 (install uv).
 
 ---
 
